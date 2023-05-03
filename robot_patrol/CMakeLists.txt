@@ -21,6 +21,19 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+find_package(rosidl_default_generators REQUIRED)
+
+set(srv_files
+	"srv/GetDirection.srv"
+	)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+	"srv/GetDirection.srv"
+
+	DEPENDENCIES sensor_msgs
+)
+ament_export_dependencies(rosidl_default_runtime)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -34,8 +47,31 @@ endif()
 
 add_executable(patrol_node src/patrol.cpp)
 ament_target_dependencies(patrol_node sensor_msgs geometry_msgs rclcpp)
+
+add_executable(direction_service_node src/direction_service.cpp)
+ament_target_dependencies(direction_service_node rclcpp)
+
+add_executable(test_service_node src/test_service.cpp)
+ament_target_dependencies(test_service_node rclcpp)
+
+add_executable(patrol_v2_node src/patrol_v2.cpp)
+ament_target_dependencies(patrol_v2_node sensor_msgs geometry_msgs rclcpp)
+
+# Link against service msg
+rosidl_target_interfaces(direction_service_node
+	${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+rosidl_target_interfaces(test_service_node
+	${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+rosidl_target_interfaces(patrol_v2_node
+	${PROJECT_NAME} "rosidl_typesupport_cpp")
+
 install(TARGETS
 	patrol_node
+	direction_service_node
+	test_service_node
+	patrol_v2_node
 	DESTINATION lib/${PROJECT_NAME})
 
 
