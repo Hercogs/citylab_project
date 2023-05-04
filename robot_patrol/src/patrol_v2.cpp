@@ -80,10 +80,12 @@ void Patrol::sub_laser_clb(const sensor_msgs::msg::LaserScan::SharedPtr msg) {
       this->pub_velocity_msg.linear.x = 0.1;
       this->pub_velocity_msg.angular.z = 0.0;
     } else if (result->direction == "left") {
-      this->pub_velocity_msg.linear.x = 0.05;
+      this->pub_velocity_msg.linear.x =
+          0.02; // SMall linear speed, so robot do not stuck
       this->pub_velocity_msg.angular.z = 0.2;
     } else if (result->direction == "right") {
-      this->pub_velocity_msg.linear.x = 0.05;
+      this->pub_velocity_msg.linear.x =
+          0.02; // SMall linear speed, so robot do not stuck
       this->pub_velocity_msg.angular.z = -0.2;
     } else {
       RCLCPP_ERROR(this->get_logger(), "Unknown response");
